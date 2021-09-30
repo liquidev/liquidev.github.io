@@ -1,0 +1,75 @@
+// Bespoke syntax theme. Please do not steal kthx.
+
+:root {
+   --syntax-outline: rgba(0, 0, 0, 5%);
+   --syntax-background: rgba(0, 0, 0, 2%);
+
+   --syntax-comment: rgba(0, 0, 0, 65%);
+   --syntax-keyword: #d80c3f;
+   --syntax-literal: #aa006d;
+   --syntax-function: #017bd3;
+   --syntax-type: #cb4c00;
+   --syntax-string: #007e39;
+   --syntax-string-escape: #007e39;
+}
+
+@media screen and (prefers-color-scheme: dark) {
+   :root {
+      --syntax-outline: rgba(255, 255, 255, 10%);
+      --syntax-background: rgba(255, 255, 255, 3%);
+
+      --syntax-comment: rgba(255, 255, 255, 50%);
+      --syntax-keyword: #ff4674;
+      --syntax-literal: #ff73e8;
+      --syntax-function: #44caff;
+      --syntax-type: #ff8d2f;
+      --syntax-string: #7fec52;
+      --syntax-string-escape: #06ca4a;
+   }
+}
+
+.highlight {
+   .k, .kd, .kr, .ow, .cp {
+      color: var(--syntax-keyword);
+   }
+
+   .s, .sb, .sc, .sd, .s2, .sh, .si, .sx, .s1 {
+      color: var(--syntax-string);
+   }
+
+   .se {
+      color: var(--syntax-string-escape);
+   }
+
+   .l, .ld, .m, .mh, .mi, .il, .mo, .mx, .mb, .ss, .kc, .nl {
+      color: var(--syntax-literal);
+   }
+
+   .nb, .nf {
+      color: var(--syntax-function);
+   }
+
+   .nc, .ne, .nn, .kt {
+      color: var(--syntax-type);
+   }
+
+   .c, .cm, .c1, .cs {
+      color: var(--syntax-comment);
+   }
+}
+
+code {
+   font-family: "Cascadia Mono", "Consolas", monospace;
+   font-size: 0.95em;
+}
+
+pre {
+   padding: 16px;
+   margin: 8px;
+
+   overflow-x: auto;
+
+   border: 1px var(--syntax-outline) solid;
+   border-radius: 6px;
+   background-color: var(--syntax-background);
+}

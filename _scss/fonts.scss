@@ -1,0 +1,48 @@
+// I'm hosting my own copies of fonts simply to aid in helping this website stay up online longer.
+// Also, fuck Google's tracking.
+
+@font-face {
+   font-family: 'Rubik';
+   font-weight: normal;
+   font-style: normal;
+   src:
+      local(''),
+      url('../fonts/rubik-v14-latin-regular.woff2') format('woff2'),
+      url('../fonts/rubik-v14-latin-regular.woff') format('woff');
+}
+
+
+@font-face {
+   font-family: 'Rubik';
+   font-weight: normal;
+   font-style: italic;
+   src:
+      local(''),
+      url('../fonts/rubik-v14-latin-italic.woff2') format('woff2'),
+      url('../fonts/rubik-v14-latin-italic.woff') format('woff');
+}
+
+@font-face {
+   font-family: 'Rubik';
+   font-weight: bold;
+   font-style: normal;
+   src:
+      local(''),
+      url('../fonts/rubik-v14-latin-500.woff2') format('woff2'),
+      url('../fonts/rubik-v14-latin-500.woff') format('woff');
+}
+
+@font-face {
+   font-family: 'Rubik';
+   font-weight: bold;
+   font-style: italic;
+   src:
+      local(''),
+      url('../fonts/rubik-v14-latin-500italic.woff2') format('woff2'),
+      url('../fonts/rubik-v14-latin-500italic.woff') format('woff');
+}
+
+@font-face {
+   font-family: "Cascadia Mono";
+   src: local(''), url("../fonts/CascadiaMono.woff2");
+}

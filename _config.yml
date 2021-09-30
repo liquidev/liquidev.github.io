@@ -1,0 +1,11 @@
+title: liquidev
+email: liquidev@tutanota.com
+description: I like making things.
+baseurl: ""
+url: ""
+twitter_username: daknus_
+github_username: liquidev
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag

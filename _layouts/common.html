@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html>
+
+{%- include head.html -%}
+
+<body>
+   <div class="everything">
+      {%- include header.html -%}
+
+      <div class="content">
+         {{ content }}
+      </div>
+
+      {%- include footer.html -%}
+   </div>
+
+   <script src="{{ 'assets/script.js' | relative_url }}"></script>
+</body>
+
+</html>

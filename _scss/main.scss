@@ -1,0 +1,252 @@
+@use "sass:color";
+
+@import "fonts";
+@import "syntax";
+
+// Please bear in mind that most of this CSS is just glued together until it looks good.
+// Thanks!
+
+:root {
+   --brand-1: #eb134a;
+   --brand-2: #058ef0;
+   --brand-text: #ffffff;
+
+   --background: #ffffff;
+   --text: #303030;
+   --selection: rgba(0, 0, 0, 15%);
+
+   --header-underline: rgba(0, 0, 0, 15%);
+   --shadow: rgba(34, 41, 68, 35%);
+
+   --nav-buttons-outline: var(--header-underline);
+   --nav-buttons-fill: var(--brand-1);
+
+   --link: #0374dd;
+   --link-text: var(--brand-text);
+}
+
+@media screen and (prefers-color-scheme: dark) {
+   :root {
+      --background: #202020;
+      --text: #eeeeee;
+      --selection: rgba(255, 255, 255, 20%);
+
+      --header-underline: rgba(255, 255, 255, 15%);
+      --shadow: rgba(0, 0, 0, 40%);
+
+      --link: #2abbff;
+      --link-text: rgba(0, 0, 0, 80%);
+   }
+}
+
+body {
+   margin: 0;
+
+   color: var(--text);
+   background-color: var(--background);
+
+   font-family: "Rubik", "Helvetica", "Segoe UI", sans-serif;
+   font-size: 1em;
+   line-height: 1.5;
+}
+
+.everything {
+   max-width: 800px;
+   margin-left: auto;
+   margin-right: auto;
+
+   padding-left: 16px;
+   padding-right: 16px;
+}
+
+.header {
+   margin-bottom: 32px;
+
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+}
+
+.name-box {
+   padding: 24px;
+   padding-top: 20px;
+   margin-right: 32px;
+   border-radius: 0 0 8px 8px;
+
+   background-image: linear-gradient(290deg, var(--brand-1), var(--brand-2));
+   color: var(--brand-text);
+   box-shadow: 0 6px 24px var(--shadow);
+
+   h1, h2 {
+      margin: 0;
+      padding: 0;
+   }
+
+   h1 {
+      font-size: 1.75em;
+      padding-bottom: 4px;
+   }
+   h2 {
+      font-size: 1rem;
+   }
+}
+
+.navigation-links {
+   padding: 0;
+   margin-bottom: 8px;
+
+   display: flex;
+   flex-direction: row;
+
+   list-style-type: none;
+
+   li {
+      padding-right: 16px;
+   }
+   li:last-child {
+      padding-right: 0;
+   }
+
+   .separator {
+      border-left: 1px var(--header-underline) solid;
+   }
+
+   li a {
+      padding: 8px 16px 8px 16px;
+
+      color: var(--text);
+      border: 1px var(--nav-buttons-outline) solid;
+      border-radius: 6px;
+
+      text-decoration: none;
+
+      transition: 0.2s background-color, 0.2s color, 0.2s border-color;
+   }
+   li a:hover {
+      color: var(--brand-text);
+      background-color: var(--nav-buttons-fill);
+      border-color: var(--nav-buttons-fill);
+   }
+}
+
+.navigation-quote {
+   margin-bottom: 0;
+}
+
+// Header responsiveness
+@media screen and (max-width: 480px) {
+   .header {
+      flex-direction: column;
+   }
+
+   .name-box {
+      width: calc(100% - 128px);
+      text-align: center;
+      margin-bottom: 32px;
+      margin-right: 0;
+   }
+
+   .header-links {
+      text-align: center;
+   }
+
+   .navigation-links {
+      justify-content: center;
+   }
+}
+
+.content {
+   h1, h2, h3, h4, h5, h6 {
+      border-bottom: 1px var(--header-underline) solid;
+
+      a {
+         color: var(--text);
+         text-decoration: none;
+      }
+      a:hover {
+         color: var(--text);
+         background-color: transparent;
+      }
+   }
+
+   a {
+      padding: 2px;
+      margin: -2px;
+      border-radius: 3px;
+      color: var(--link);
+      transition: 0.2s background-color, 0.2s color, 0.2s border-color, 0.2s text-decoration-color;
+   }
+   a:hover {
+      background-color: var(--link);
+      color: var(--link-text);
+      text-decoration-color: var(--link);
+   }
+
+   hr {
+      border: none;
+      border-bottom: 1px var(--header-underline) solid;
+      margin: 32px 0 32px 0;
+   }
+
+   .post-page-date {
+      margin: 0;
+      padding: 0;
+      border: none;
+      font-size: 16px;
+      font-weight: normal;
+   }
+}
+
+.posts {
+   .post-list {
+      list-style-type: none;
+      padding: 0;
+   }
+
+   a, a:hover {
+      all: revert;
+      color: var(--text);
+      text-decoration: none;
+   }
+
+   .post-link {
+      padding: 16px;
+      margin: 0 32px 0 32px;
+      border: 1px var(--header-underline) solid;
+      border-radius: 6px;
+   }
+
+   .post-title, .post-date {
+      border: none;
+      margin: 0;
+   }
+   .post-title {
+      font-size: 24px;
+   }
+   .post-date {
+      font-size: 14px;
+   }
+
+   p {
+      margin: 16px 0 0 0;
+   }
+}
+
+.footer {
+   margin-top: 10%;
+   margin-bottom: 10%;
+   padding-top: 16px;
+
+   border-top: 1px var(--header-underline) solid;
+
+   text-align: center;
+   opacity: 75%;
+
+   a {
+      color: var(--text);
+   }
+}
+
+::selection {
+   background-color: var(--selection);
+}
