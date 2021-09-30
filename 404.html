@@ -1,26 +1,27 @@
 ---
-permalink: /404.html
+permalink: /404
 layout: common
 ---
 
 <style type="text/css" media="screen">
-  .container {
-    margin: 10px auto;
-    max-width: 600px;
-    text-align: center;
-  }
+   .container {
+      margin: 12px auto;
+      margin-top: 64px;
+      max-width: 600px;
+      text-align: center;
+   }
 
-  h1 {
-    margin: 30px 0;
-    font-size: 4em;
-    line-height: 1;
-    letter-spacing: -1px;
-  }
+   .four-oh-four {
+      font-size: 48px;
+   }
 </style>
 
 <div class="container">
-  <h1>404</h1>
+   <h1 class="four-oh-four">404</h1>
 
-  <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found.</p>
+   <p>
+      Hey, uh, so, this is interesting.<br>
+      You seem to be a little lost there, fren. Maybe you should go back
+      <a href="{{ 'index.html' | absolute_url }}">home</a>.
+   </p>
 </div>
