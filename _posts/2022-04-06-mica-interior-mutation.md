@@ -4,8 +4,10 @@ layout: post
 ---
 
 JavaScript, Python, Lua, Ruby, … all have an annoying problem. Constants (or immutable variables)
-can actually be mutated! How in the world did it come to this? Let's have a look at how immutability
-works in these languages, and how I fixed it in Mica.
+can actually be mutated!
+
+…Well, not exactly. You can't _assign new values_ to constants. That's the whole point. But I
+believe that guarantee is not strong enough. Let's have a look.
 
 # How things are today
 
