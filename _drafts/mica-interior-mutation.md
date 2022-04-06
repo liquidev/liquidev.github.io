@@ -113,7 +113,8 @@ impl struct Player
    end
 
    func new_remote() constructor
-      # This is the second constructor, so mutability of fields is inherited from the first one.
+      # This is the second constructor, so mutability of fields is inherited
+      # from the first one.
       remote_pos = server.request_player_position()
       @x = remote_pos.x
       @y = remote_pos.y
@@ -177,13 +178,14 @@ again. In Mica this process is irreversible. Once a value is frozen, it cannot b
 
 Note that this only matters for some types of objects; namely, ones that have interior mutability
 on the Rust side, such as lists and structs. For everything else we can continue as normal.
-Now ask me _which_ bit this sets, and uhh… I don't know. NaN-boxed values are pretty tight on
-space. What's important is that, every single reference to a variable containing an object with a
-mutable interior produces a frozen version of that original value.
+Now ask me _which_ bit this sets in the value representation, and uhh… I don't know.
+NaN-boxed values are pretty tight on space. What's important is that, every single reference to a
+variable containing an object with a mutable interior produces a frozen version of that original
+value.
 
 By the way do note that everything is pass-by-value in Mica. It's just that strings, functions,
 lists, structs, and user data, are all just pointers to a heap allocation inside.
-So if you copy them, you're essentially creating a new reference to the value behind the pointers.
+So if you copy them, you're essentially creating a new reference to the value behind the pointer.
 Freezing a value prevents you from writing to anything behind that reference.
 
 _You may look, but you shall not touch._
