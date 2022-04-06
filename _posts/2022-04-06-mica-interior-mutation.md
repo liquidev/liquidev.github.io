@@ -233,7 +233,8 @@ a bit to say
 *"hey, this reference to the object is immutable. Please don't ruin what's inside.kthx ^^"*
 
 <sup>Freezing isn't a very good name because it implies that a frozen thing can become unfrozen
-again. In Mica this process is irreversible. Once a value is frozen, it cannot be thawed.</sup>
+again. In Mica this process is irreversible. Once a reference is frozen, it cannot be thawed.
+You don't carry a heat gun or an oven around with you all the time, do you?</sup>
 
 Note that this only matters for some types of objects; namely, ones that have interior mutability
 on the Rust side, such as lists and structs. For everything else we can continue as normal.
@@ -260,7 +261,7 @@ mut d = mut c
 ```
 Some important things:
 - `mut` can only be used on variables and fields, and the value inside the variable must not be
-  frozen (or _warm_, as I'm gonna say from now on).
+  frozen (or, be _warm_, as I'm gonna say from now on).
 - `mut` can only be used on variables and fields that are themselves mutable.
 
 With this syntax, we can now enforce that `mut`-annotated functions can only be called on warm
