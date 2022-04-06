@@ -227,44 +227,38 @@ impl struct Vector
    end
 end
 ```
-But the annotation itself is pretty useless if it's not enforced. So we now alter referencing
-variables, to perform an action I like to call _freezing_. It's essentially the process of flipping
-a bit to say
-*"hey, this reference to the object is immutable. Please don't ruin what's inside.kthx ^^"*
-
-<sup>Freezing isn't a very good name because it implies that a frozen thing can become unfrozen
-again. In Mica this process is irreversible. Once a reference is frozen, it cannot be thawed.
-You don't carry a heat gun or an oven around with you all the time, do you?</sup>
+But the annotation itself is pretty useless if it's not enforced. So we now alter the mere act of
+referencing variables, such that it _decays the copied value as immutable_. From the
+implementation's point of view, it's essentially just a bit flip a bit to say,
+*Hey, this reference to the object is now immutable. Please don't ruin what's inside. kthx ^^*
 
 Note that this only matters for some types of objects; namely, ones that have interior mutability
 on the Rust side, such as lists and structs. For everything else we can continue as normal.
 Now ask me _which_ bit this sets in the value representation, and uhh… I don't know.
-NaN-boxed values are pretty tight on space. What's important is that, every single reference to a
-variable containing an object with a mutable interior produces a frozen version of that original
+NaN-boxed values are pretty tight on space. What's important is that, every single read of a
+variable containing an object with a mutable interior produces a immutable version of that original
 value.
 
 By the way do note that everything is pass-by-value in Mica. It's just that strings, functions,
 lists, structs, and user data, are all just pointers to a heap allocation inside.
 So if you copy them, you're essentially creating a new reference to the value behind the pointer.
-Freezing a value prevents you from writing to anything behind that reference.
+Decaying the mutability prevents you from writing to anything behind that reference.
 
 _You may look, but you shall not touch._
 
 Of course if _every_ single attempt to reference a variable would result in getting an immutable
 reference, that would be pretty useless, because we wouldn't be able to mutate the object inside,
 at all, _ever_. This is where `mut` expressions come in again. To copy a value out of a variable
-without immediately freezing it, we can use the `mut` expression. For instance:
+without immediately decaying it, we can use the `mut` expression. For instance:
 ```mica
 mut c = Cell.new(1)
 # Create a second mutable reference to the same cell.
 mut d = mut c
 ```
-Some important things:
-- `mut` can only be used on variables and fields, and the value inside the variable must not be
-  frozen (or, be _warm_, as I'm gonna say from now on).
-- `mut` can only be used on variables and fields that are themselves mutable.
+`mut` in non-left-hand-side-of-assignment position can only be used on variables and fields that are
+mutable, and the reference inside must not be immutable.
 
-With this syntax, we can now enforce that `mut`-annotated functions can only be called on warm
+With this syntax, we can now enforce that `mut`-annotated functions can only be called on mutable
 values. But there's a problem. See, now if we want to call a function that mutates a value inside of
 a variable, we need to go through _this_ ceremony:
 ```mica
@@ -284,7 +278,7 @@ c.set(1)
 # Conclusion
 
 Aaaand, that's it! Interior mutability is solved. To be able to mutate an object you now have to
-have an explicit permission from its owner, or from whoever else holds a warm reference to said
+have an explicit permission from its owner, or from whoever else holds a mutable reference to said
 object.
 
 Now onto implementing all of this…
