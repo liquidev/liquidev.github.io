@@ -61,6 +61,17 @@
 code {
    font-family: "Cascadia Mono", "Consolas", monospace;
    font-size: 0.95em;
+
+   padding: 4px;
+
+   border-radius: 4px;
+   background-color: var(--code);
+}
+
+pre code {
+   background-color: transparent;
+   border-radius: 0;
+   padding: 0;
 }
 
 pre {

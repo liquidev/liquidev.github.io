@@ -23,6 +23,8 @@
 
    --link: #0374dd;
    --link-text: var(--brand-text);
+
+   --code: rgba(0, 0, 0, 5%);
 }
 
 @media screen and (prefers-color-scheme: dark) {
@@ -36,6 +38,8 @@
 
       --link: #2abbff;
       --link-text: rgba(0, 0, 0, 80%);
+
+      --code: rgba(255, 255, 255, 7%);
    }
 }
 
@@ -200,6 +204,10 @@ body {
       font-size: 16px;
       font-weight: normal;
    }
+
+   img {
+      width: 100%;
+   }
 }
 
 .posts {
@@ -219,6 +227,10 @@ body {
       margin: 0 32px 0 32px;
       border: 1px var(--header-underline) solid;
       border-radius: 6px;
+   }
+
+   .post-link:not(:last-child) {
+      margin-bottom: 16px;
    }
 
    .post-title, .post-date {
