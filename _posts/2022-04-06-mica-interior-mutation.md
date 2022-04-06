@@ -33,7 +33,7 @@ i = 2  -- error: attempt to assign to const variable 'i'
 ```
 Seems fine on the surface, but… there's a problem.
 ```lua
-local b <const> = { x = 1 }
+local b <const> = { i = 1 }
 b.i = 2  -- works
 ```
 Same thing as JavaScript. It's only surface-level immutability, and very inconvenient to use on
