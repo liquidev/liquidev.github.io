@@ -1,13 +1,70 @@
 ---
-title: "Solving interior mutability of consts in popular scripting languages"
+title: "Solving the mutability of consts in popular scripting languages"
 layout: post
 ---
 
+JavaScript, Python, Lua, Ruby, … all have an annoying problem. Constants (or immutable variables)
+can actually be mutated! How in the world did it come to this? Let's have a look at how immutability
+works in these languages, and how I fixed it in Mica.
+
+# How things are today
+
+Out of the four languages I listed, I'm familiar with the first three, and have read a bit about
+Ruby (but haven't coded anything meaningful in it). Let's see how they fare.
+
+First up, we have JavaScript with its `const`.
+```js
+const i = 0
+i = 2        // Uncaught TypeError: invalid assignment to const 'i'
+```
+But it does not guarantee immutability of the _value_ that is inside the variable.
+```js
+const b = { i: 0 }
+b.i = 2  // works
+```
+
+Then there's Lua, which, since version 5.4, has a `<const>` annotation for local variables. Rather
+ugly syntactically, but let's see how it works.
+```lua
+local i <const> = 1
+i = 2  -- error: attempt to assign to const variable 'i'
+```
+Seems fine on the surface, but… there's a problem.
+```lua
+local b <const> = { x = 1 }
+b.i = 2  -- works
+```
+Same thing as JavaScript. It's only surface-level immutability, and very inconvenient to use on
+top of that.
+
+Ruby has constants, which are simply variables that start with an uppercase letter. They have some
+really strange scoping rules though – you cannot define a constant in a method, it has to be defined
+in a class.
+```ruby
+HELLO = "Hello!"  # works
+def hi
+   HI = "Hi!"     # error: dynamic constant assignment (SyntaxError)
+end
+```
+But even then, it shares the same problem as JavaScript and Lua.
+```ruby
+# I'm using a hash here since I don't know if there's an easier way of creating an object instance
+# than through declaring a class with a constructor.
+BOX = { :i => 1 }
+def stuff
+   BOX[:i] = 2
+end
+stuff  # works
+```
+
+Python has no form of immutable variables at all.
+
+# A new contender
+
 [Mica](https://github.com/mica-lang/mica) is a dynamically typed scripting language I've been
 developing over the past month or so, purely for fun. One thing I've been quite troubled with is how
-to achieve a sensible system for immutability. Maybe not so much _deep_ immutability, like the one
-offered by more advanced statically typed languages such as [Rust](https://rust-lang.org), but
-rather a simple a way of making mutating operations _obvious_.
+to achieve a sensible system for immutability. And I mean _immutability_. As in _deep_. If you give
+someone the permission to read, they _must_ uphold that invariant on all layers.
 
 # Variables
 
