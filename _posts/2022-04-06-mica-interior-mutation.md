@@ -50,8 +50,8 @@ end
 ```
 But even then, it shares the same problem as JavaScript and Lua.
 ```ruby
-# I'm using a hash here since I don't know if there's an easier way of creating an object instance
-# than through declaring a class with a constructor.
+# I'm using a hash here since I don't know if there's an easier way of creating
+# an object instance than through declaring a class with a constructor.
 BOX = { :i => 1 }
 def stuff
    BOX[:i] = 2
