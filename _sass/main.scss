@@ -101,27 +101,41 @@ body {
 }
 
 .navigation-links {
+   --height: 40px;
+
    padding: 0;
    margin-bottom: 8px;
+   height: var(--height);
 
    display: flex;
    flex-direction: row;
+   align-items: center;
 
    list-style-type: none;
 
    li {
       padding-right: 16px;
+      height: 100%;
    }
    li:last-child {
       padding-right: 0;
    }
 
    .separator {
+      height: calc(100% + 8px);
       border-left: 1px var(--header-underline) solid;
    }
 
    li a {
-      padding: 8px 16px 8px 16px;
+      padding-left: 16px;
+      padding-right: 16px;
+      height: 100%;
+
+      box-sizing: border-box;
+
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
 
       color: var(--text);
       border: 1px var(--nav-buttons-outline) solid;
@@ -135,6 +149,10 @@ body {
       color: var(--brand-text);
       background-color: var(--nav-buttons-fill);
       border-color: var(--nav-buttons-fill);
+   }
+   li a.icon {
+      padding: 0;
+      width: var(--height);
    }
 }
 
