@@ -162,8 +162,8 @@ int main(void) {
 }
 ```
 
-And that's all there really is to the basics of iterators. They're nothing complicated, in fact
-they're just a bunch of overloaded operators.
+And that's all there really is to the basics of iterators. They're nothing complicated;
+they're just types with a few operators overloaded.
 
 Personally, coming from Rust, I had trouble understanding them, because I expected that the iterator
 does *all* the iteration in a range-based `for`. But in C++, it's different: iterators and iterables
