@@ -7,8 +7,7 @@
 // Thanks!
 
 :root {
-   --brand-1: #eb134a;
-   --brand-2: #058ef0;
+   --brand: #058ef0;
    --brand-text: #ffffff;
 
    --background: #ffffff;
@@ -16,10 +15,9 @@
    --selection: rgba(0, 0, 0, 15%);
 
    --header-underline: rgba(0, 0, 0, 15%);
-   --shadow: rgba(34, 41, 68, 35%);
+   --header-outline: var(--text);
 
-   --nav-buttons-outline: var(--header-underline);
-   --nav-buttons-fill: var(--brand-1);
+   --nav-buttons-fill: var(--selection);
 
    --link: #0374dd;
    --link-text: var(--brand-text);
@@ -34,7 +32,7 @@
       --selection: rgba(255, 255, 255, 20%);
 
       --header-underline: rgba(255, 255, 255, 15%);
-      --shadow: rgba(0, 0, 0, 40%);
+      --header-outline: transparent;
 
       --link: #2abbff;
       --link-text: rgba(0, 0, 0, 80%);
@@ -64,6 +62,7 @@ body {
 }
 
 .header {
+   margin-top: 32px;
    margin-bottom: 32px;
 
    display: flex;
@@ -72,14 +71,16 @@ body {
 }
 
 .name-box {
-   padding: 24px;
-   padding-top: 20px;
+   padding: 16px 24px 8px 24px;
    margin-right: 32px;
-   border-radius: 0 0 8px 8px;
+   border-radius: 100px;
+   line-height: normal;
+   box-sizing: border-box;
 
-   background-image: linear-gradient(290deg, var(--brand-1), var(--brand-2));
+   background-color: var(--brand);
    color: var(--brand-text);
-   box-shadow: 0 6px 24px var(--shadow);
+   border: 3px solid white;
+   box-shadow: 0 0 0 1px var(--header-outline);
 
    h1, h2 {
       margin: 0;
@@ -104,8 +105,9 @@ body {
    --height: 40px;
 
    padding: 0;
-   margin-bottom: 8px;
    height: var(--height);
+   margin-top: 8px;
+   margin-bottom: 8px;
 
    display: flex;
    flex-direction: row;
@@ -115,6 +117,10 @@ body {
 
    li {
       padding-right: 16px;
+      height: 100%;
+   }
+   li.icon-container {
+      padding-right: 8px;
       height: 100%;
    }
    li:last-child {
@@ -127,8 +133,8 @@ body {
    }
 
    li a {
-      padding-left: 16px;
-      padding-right: 16px;
+      padding-left: 20px;
+      padding-right: 20px;
       height: 100%;
 
       box-sizing: border-box;
@@ -138,8 +144,8 @@ body {
       align-items: center;
 
       color: var(--text);
-      border: 1px var(--nav-buttons-outline) solid;
-      border-radius: 6px;
+      // border-bottom: 1px var(--nav-buttons-outline) solid;
+      border-radius: 100px;
 
       text-decoration: none;
 
@@ -242,12 +248,13 @@ body {
 
    .post-link {
       padding: 16px;
+      padding-bottom: 24px;
       margin: 0 32px 0 32px;
-      border: 1px var(--header-underline) solid;
-      border-radius: 6px;
+      // border: 1px var(--header-underline) solid;
    }
 
    .post-link:not(:last-child) {
+      border-bottom: 1px var(--header-underline) solid;
       margin-bottom: 16px;
    }
 

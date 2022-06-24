@@ -3,8 +3,12 @@ email: liquidev@tutanota.com
 description: I like making things.
 baseurl: ""
 url: ""
-twitter_username: daknus_
-github_username: liquidev
+
+social:
+  github: liquidev
+  twitter: liquidexw
+  bandcamp: daknus
+  soundcloud: daknus
 
 plugins:
   - jekyll-feed
