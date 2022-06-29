@@ -9,6 +9,7 @@ social:
   twitter: liquidexw
   bandcamp: daknus
   soundcloud: daknus
+  itch: lqdev
 
 plugins:
   - jekyll-feed
