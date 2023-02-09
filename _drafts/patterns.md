@@ -1,0 +1,407 @@
+---
+title: "All is patterns and patterns are everywhere"
+layout: post
+---
+
+A Rust tip for newcomers.
+
+If you're learning Rust, you probably know about the `match` expression. It allows you to do stuff
+like take an `Option<T>` apart:
+
+```rust
+fn example(x: Option<i32>) {
+  match x {
+    Some(x) => println!("{x}"),
+    None => println!("Nothing!"),
+  }
+}
+```
+
+Reading [the Rust book](https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html), you probably
+also learned a thing about defining your own enums, which you can also `match` on:
+
+```rust
+struct LinearRgb { r: f32, g: f32, b: f32 }
+struct LinearRgba { r: f32, g: f32, b: f32, a: f32 }
+
+enum AnyColor {
+  LinearRgb(LinearRgb),
+  LinearRgba(LinearRgba),
+}
+
+impl AnyColor {
+  fn to_linear_rgba(self) -> LinearRgba {
+    match self {
+      AnyColor::LinearRgb(rgb) => LinearRgba { r: rgb.r, g: rgb.g, b: rgb.b, a: 1.0 },
+      AnyColor::LinearRgba(rgba) => rgba,
+    }
+  }
+}
+```
+
+Now, I'll admit it: I haven't read the entire Rust book. It demonstrates patterns and where
+they can be used in [chapter 18](https://doc.rust-lang.org/book/ch18-01-all-the-places-for-patterns.html) (!),
+but I bailed out long before I got to that point. What fun is there in reading a book about a shiny
+new language and not trying out that shiny new language after all?
+
+If you're like me, then this post is for you. A hopefully nice, dense, and terse explanation of
+pattern matching.
+
+Brace yourself, because we're in for a real ride.
+
+## But what are patterns, exactly?
+
+Patterns are at the core of pattern matching, so it's important that we define what they actually
+are. But before we get to that, let's start with something everybody learns at the beginning of
+their programming career: *literals.*
+
+Literals are the bread and butter of inputting data into a program. If you've never heard of them
+being referred to that way - the name comes from them being *literal values* that you put into the
+program's source code, such as `1`:
+
+```rust
+let an_int = 1; // that's a literal!
+```
+
+The simplest types of literals are those for representing primitive data types such as `bool` or
+integers, but we also have literals for compound data types such as structs.
+
+```rust
+struct Vector {
+  x: f32,
+  y: f32,
+}
+
+struct Player {
+  position: Vector,
+}
+
+let player = Player {
+  position: Vector {
+    x: 32.0,
+    y: 32.0,
+  },
+};
+```
+
+What's common among all types of literals is that they are used for *making new values*. And you
+may be like, *duh* of course they do! Weren't you supposed to be talking about patterns?
+
+The reason why I'm bringing up literals is because **patterns are the exact opposite thing.**
+Instead of *making* values, they *break* them apart into pieces.
+
+Consider that `AnyColor::to_linear_rgba` function from before:
+
+```rust
+enum AnyColor {
+  LinearRgb(LinearRgb),
+  LinearRgba(LinearRgba),
+}
+
+impl AnyColor {
+  fn to_linear_rgba(self) -> LinearRgba {
+    match self {
+      AnyColor::LinearRgb(rgb) => LinearRgba { r: rgb.r, g: rgb.g, b: rgb.b, a: 1.0 },
+      AnyColor::LinearRgba(rgba) => rgba,
+    }
+  }
+}
+```
+
+Recall that the left-hand side of `=>` in a `match` is the pattern we're matching against.
+Remember how you can construct an enum?
+
+```rust
+let color = AnyColor::LinearRgb(rgb);
+```
+
+Now compare the two:
+
+```rust
+let color = AnyColor::LinearRgb(rgb);
+            AnyColor::LinearRgb(rgb) => LinearRgba { r: rgb.r, g: rgb.g, b: rgb.b, a: 1.0 },
+```
+
+It's a *match*! <sub>(pun intended.)</sub>
+
+Patterns use the same syntax as literals, so any time you want to break a value apart to
+pieces, you can just write a matching literal, replacing exact values that you don't want to match
+exactly with identifiers, and in 99% of cases it'll work!
+
+```rust
+// Let's say we have a tuple:
+let tuple = (1, 2, 3);
+
+// We want to do something special with the second
+// and third number if the first number is 1.
+match tuple {
+  // Note how I replaced the values I want to take out
+  // from the tuple with identifiers.
+  (1, x, y) => println!("x + y = {}", x + y),
+  _ => (),
+}
+```
+
+## They're more advanced than you think they are
+
+But recall also that `Vector` and `Player` example from before. Did you notice that the literals
+nest? – the `Player {}` literal nests a `Vector {}` literal inside of itself.
+
+And the best news is that **patterns can do that too.**
+
+```rust
+enum Entity {
+  Player(Player),
+  Enemy(Enemy),
+}
+
+let entity = /* ... */;
+
+match entity {
+  // Look at that! A pattern matching a struct inside a struct inside an enum.
+  Entity::Player(Player {
+    position: Vector { x, y },
+  }) => {
+    println!("Got a player at x = {x}, y = {y}"),
+  },
+  _ => (),
+}
+```
+
+But wait, there's more! Sometimes you get a big struct and you're not interested in 80% of its
+contents. You could just ignore its fields one by one by matching them against `_`...
+
+```rust
+match some_struct {
+  SomeStruct {
+    name: "bye_egg",
+    // Just like in struct literals, we can omit the value after `:`, but this time instead of
+    // creating the field from an existing variable it'll create a new variable with the same name
+    // as the field - exactly the opposite to what literals do!
+    value,
+    some: _,
+    uninteresting: _,
+    stuff: _,
+  } => /* ... */,
+  _ => (),
+}
+```
+
+...or you could just use `..` to ignore them all.
+
+```rust
+match some_struct {
+  SomeStruct {
+    name: "bye_egg",
+    value,
+    ..
+  } => /* ... */,
+  _ => (),
+}
+```
+
+Pretty neat, isn't it?
+
+And this works with more than just structs. Tuples also let you do that:
+
+```rust
+match (1, 2, 3, 4, 5) {
+  (first, ..) => /* ... */,
+
+  // It can even go in the middle!
+  // But you can only have one, otherwise
+  // how would it know how many elements to discard?
+  (first, .., last) => /* ... */,
+
+  // And of course it can go at the end, too.
+  (.., second_to_last, last) => /* ... */,
+}
+```
+
+Speaking of tuples, notice how I used a tuple literal after `match` here? You can match on multiple
+values using that.
+
+```rust
+match (instruction, a, b) {
+  (Instruction::Add, x, y) => x + y,
+  (Instruction::Double, x, _) => x * 2,
+}
+```
+
+## There are two types of patterns
+
+Recall that Rust forces you to handle every possible case in a `match` expression. For example,
+this will not work:
+
+```rust
+match x {
+  1 => println!("One!"),
+}
+```
+
+but if we add a catch-all `_` *wildcard* pattern at the end, it will:
+
+```rust
+match x {
+  1 => println!("One!"),
+  _ => (),
+}
+```
+
+There are certain cases though where we do not need such a catch-all, such as:
+
+```rust
+match () {
+  () => println!("in this example!"),
+}
+```
+
+The property we're observing here is called *exhaustiveness*. A pattern is *exhaustive* when it
+matches against all values of a given type. We could also use the definition that a pattern is
+exhaustive if the compiler doesn't complain when we throw it into a `match` with a single arm, like
+in the case above.
+
+Certain patterns are always non-exhaustive. For example, a primitive literal like `1` is never
+exhaustive, since there are other literals of the same type that would not match `1`.
+
+Other patterns are always exhaustive. For example, the wildcard pattern `_` is always exhaustive,
+since it matches against any value and ignores it. The identifier pattern `abc` is also always
+exhaustive, because it matches against any value and assigns it to a new variable `abc`.
+
+However, there are also compound patterns such as tuples and structs, and since they can contain
+other patterns inside of them, they're only exhaustive if all their contained patterns are also
+exhaustive. For example the pattern `(a, b)` is exhaustive since it matches any tuple, but the
+pattern `(1, b)` is not, since it would fail to match any tuple whose first field is not `1`.
+
+## They're everywhere
+
+And that leads me to the most mind-blowing part of this post, which is also the title:
+**patterns are everywhere.** `match` is hardly the only language construct that uses patterns.
+Recall `if let`:
+
+```rust
+if let Some(x) = example {
+  println!("Got a value! {x}");
+}
+```
+
+The left hand side of `=` is a (non-exhaustive) pattern!
+
+But there are also others, like `while let`:
+
+```rust
+// Iterate through an iterator, manually.
+while let Some(x) = iterator.next() {
+  println!("{x}");
+}
+```
+
+...or `let`:
+
+```rust
+let (x, y) = thing;
+println!("got {x}, {y}");
+```
+
+...or `for`:
+
+```rust
+for (key, value) in hash_map.iter() {
+  println!("{key}: {value}");
+}
+```
+
+...or parameters:
+
+```rust
+fn length_squared((x, y): (f32, f32)) -> f32 {
+  x * x + y * y
+}
+```
+
+...or parameters, again:
+
+```rust
+let sum: usize = list.iter()
+  // That's a reference pattern! It matches a reference.
+  .map(|&x| x * 2)
+  .sum();
+```
+
+But the even more mind-blowing part is that each of these use cases is syntax sugar for a `match`.
+
+Take `if let`:
+
+```rust
+if let Some(x) = example {
+  println!("Got a value! {x}");
+}
+// same as:
+match example {
+  Some(x) => println!("Got a value! {x}"),
+  _ => (),
+}
+```
+
+Or `while let`:
+
+```rust
+while let Some(x) = iterator.next() {
+  println!("{x}");
+}
+// same as:
+loop {
+  match iterator.next() {
+    Some(x) => println!("{x}"),
+    _ => break,
+  }
+}
+```
+
+Or hell, even `let`:
+
+```rust
+let (x, y) = thing;
+// same as:
+match thing {
+  (x, y) => {
+    println!("got {x}, {y}");
+  }
+  // Hey look, `let` patterns must be exhaustive!
+  // There is no catch-all branch in this `match`.
+}
+```
+
+`for` is sugar for a `while let` with an implicit iterator variable, so it's all patterns and
+`match` under the hood too:
+
+```rust
+for (key, value) in hash_map.iter() {
+  println!("{key}: {value}");
+}
+// same as:
+let mut _iterator = hash_map.iter(); // NOTE: this variable is hidden from you.
+while let Some((key, value)) = _iterator.next() {
+  println!("{key}: {value}");
+}
+// same as:
+let mut _iterator = hash_map.iter();
+loop {
+  match _iterator.next() {
+    Some((key, value)) => println!("{key}: {value}"),
+    _ => break,
+  }
+}
+```
+
+And parameters are just `let` bindings for incoming arguments. Unfortunately there's no way for us
+to desugar those, other than maybe `match`ing on incoming arguments, but that's the same as `let`
+anyways.
+
+## Conclusion
+
+I hope this post helped you see the power of patterns. Sometimes they let you write a lot less code
+than you would otherwise have to, and I really miss them while coding C++ at my day job.
+
+So make use of them! Spread the knowledge, and share this post with people who may be struggling to
+see that *all is patterns, and patterns are everywhere.*
